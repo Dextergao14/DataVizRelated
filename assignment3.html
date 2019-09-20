@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Data Viz Assignment3: Setting paragraphs' style conditionally, based on data</title>
+        <script type = "text/javascript" src="../assignment3.html"></script>
+    </head>
+    <body>
+            <script type="text/javascript">
+            var dataset = [];
+            for (var i = 1; i <= 100; i++) {
+                dataset.push(i);
+            }
+            assignment3.csv("food.csv", function(dataset) {
+                console.log(dataset);
+            });
+
+            assignment3.select("body").selectAll("p")
+                .data(dataset)
+                .enter()
+                .append("p")
+                .text(function(d) {
+                    return d;
+                })
+                .style("color", function(d) {
+                    if (d / 3 == 0) {
+                        return blue;
+                    } if else (d / 5 == 0) {
+                        return red;
+                    } if else (d / 3 == 0 and d / 5 == 0) {
+                        return green;
+                    } else {
+                        return black;
+                    }
+                });
+            </script>
+
+    </body>
+</html>
