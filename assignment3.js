@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Data Viz Assignment3: Setting paragraphs' style conditionally, based on data</title>
-        <script type = "text/javascript" src="../assignment3.html"></script>
+        <script type = "text/javascript" src="../d3.js"></script>
     </head>
     <body>
             <script type="text/javascript">
@@ -11,7 +11,7 @@
             for (var i = 1; i <= 100; i++) {
                 dataset.push(i);
             }
-            assignment3.csv("food.csv", function(dataset) {
+            assignment3.csv("d3.csv", function(dataset) {
                 console.log(dataset);
             });
 
@@ -23,11 +23,11 @@
                     return d;
                 })
                 .style("color", function(d) {
-                    if (d / 3 == 0) {
+                    if (d % 3 == 0) {
                         return blue;
-                    } if else (d / 5 == 0) {
+                    } else if (d % 5 == 0) {
                         return red;
-                    } if else (d / 3 == 0 and d / 5 == 0) {
+                    } else if (d % 15 == 0) {
                         return green;
                     } else {
                         return black;
