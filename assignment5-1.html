@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D3: Time scale</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style type="text/css">
+        /* No style rules here yet */
+    </style>
+</head>
+    <body>
+        <script type="text/javascript">
+
+        //Width and height
+        var w = 800;
+        var h = 500;
+        var padding = 40;
+
+        var dataset = [], xScale, yScale, rScale;
+        d3.csv("dataset_for_assignment.csv", function(data) {
+            dataset = data.map(function(d) { return [ +d["max_i"], +d["min_i"]]; });
+            console.log(dataset)
+        });
+
+        //For converting Dates to strings
+        var formatTime = d3.timeFormat("%H");
+
+        var rowConverter = function(d) {
+            var date = new Date(d["Created Date"]);
+                return {
+                        Hour: date.getHours(),
+                };
+        };
+
+        function countHourOccurances(data) {
+            var count ={};
+            for (var i in data) {
+                var hour = data[i].Hour;
+                if (hour in Object.keys(count)) {
+                    count[hour] += 1
+                } else {
+                    count[hour] = 1
+                }
+            }
+            var formatted = [];
+            for (var c in count) {
+                if(c != "undefined") {
+                    formatted.push({Hour:parseInt(c), Count:count[c]})
+                }
+            }
+            return formatted
+        }
+
+        //Load in the data
+        d3.csv("dataset_for_assignment.csv", rowConverter)
+            .then(function(data) {
+
+                //Copy data into global dataset
+                dataset = countHourOccurances(data);
+                //}
+
+                //Create scale functions
+                xScale = d3.scaleLinear()
+                    .domain([
+                        d3.min(dataset, function (d) {
+                            return d.Hour;
+                        }),
+                        d3.max(dataset, function (d) {
+                            return d.Hour;
+                        })
+                    ])
+                    .range([padding, w - padding]);
+
+                yScale = d3.scaleLinear()
+                    .domain([
+                        d3.min(dataset, function (d) {
+                            return d.Count;
+                        }),
+                        d3.max(dataset, function (d) {
+                            return d.Count;
+                        })
+                    ])
+                    .range([h - padding, padding]);
+
+                rScale = d3.scaleLinear()
+                    .domain([
+                        d3.min(dataset, function (d) {
+                            return d.Count;
+                        }),
+                        d3.max(dataset, function (d) {
+                            return d.Count;
+                        })
+                    ])
+                    .range([0, 0.2 * yScale]);
+                    //.domain([0, d3.max(dataset, function (d) {
+                        //return d[1];
+                    //})])
+                    //.range([0, 10]);
+
+                //Create SVG element
+                var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+
+                //Create labels
+                svg.selectAll("text")
+                    .data(dataset)
+                    .enter()
+                    .append("text")
+                    .text(function (d) {
+                        return formatTime(d.Hour);
+                    })
+                    .attr("x", function (d) {
+                        return xScale(d.Hour) + 4;
+                    })
+                    .attr("y", function (d) {
+                        return yScale(d.Amount) + 4;
+                    })
+                    .attr("font-family", "courier-new")
+                    .attr("font-size", "12px")
+                    .attr("fill", "#bbb");
+
+                //Create circles last, so they appear in the front
+                svg.selectAll("circle")
+                    .data(dataset)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function (d) {
+                        return xScale(d.Hour);
+                    })
+                    .attr("cy", function (d) {
+                        return yScale(d.Amount);
+                    })
+                    .attr("r", function(d) {
+                        return yScale(d.Amount) * 0.25;
+                    });
+            });
+
+        </script>
+    </body>
+</html>
