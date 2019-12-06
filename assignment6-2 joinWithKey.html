@@ -80,7 +80,7 @@
 			   });
 			//Create labels
 			svg.selectAll("text")
-			   .data(dataset, key)		//Bind data with custom key function
+			   .data(dataset, key)		
 			   .enter()
 			   .append("text")
 			   .text(function(d) {
@@ -107,7 +107,7 @@
 					yScale.domain([0, d3.max(dataset, function(d) { return d.value; })]);
 					//Select…
 					var bars = svg.selectAll("rect")
-						.data(dataset, key);		//Bind data with custom key function
+						.data(dataset, key);		
 					
 					//Enter…
 					bars.enter()
@@ -147,7 +147,7 @@
 					//Exercise: Modify this code to remove the correct label each time!
 					//
 					svg.selectAll("text")
-					   .data(dataset, key)		//Bind data with custom key function
+					   .data(dataset, key)		
 					   .transition()
 					   .duration(500)
 					   .text(function(d) {
