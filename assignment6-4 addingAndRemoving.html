@@ -99,7 +99,7 @@
 			   .attr("font-family", "sans-serif")
 			   .attr("font-size", "11px")
 			   .attr("fill", "white");
-			//On click, update with new data			
+			//On click, update with new data		
 			d3.selectAll("p")
 				.on("click", function() {
 					//See which p was clicked
@@ -124,11 +124,11 @@
 					//Update scale domains
 					xScale.domain(d3.range(dataset.length));
 					yScale.domain([0, d3.max(dataset, function(d) { return d.value; })]);
-					//Select…
+					//Select
 					var bars = svg.selectAll("rect")
 						.data(dataset, key);
 					
-					//Enter…
+					//Enter
 					bars.enter()
 						.append("rect")
 						.attr("x", w)
@@ -155,7 +155,7 @@
 						.attr("height", function(d) {
 							return yScale(d.value);
 						});
-					//Exit…
+					//Exit here
 					bars.exit()
 						.transition()
 						.duration(500)
